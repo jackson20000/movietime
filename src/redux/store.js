@@ -3,6 +3,8 @@ import { persistStore, persistReducer } from 'redux-persist'
 import AsyncStorage from '@react-native-community/async-storage';
 import autoMergeLevel1 from 'redux-persist/lib/stateReconciler/autoMergeLevel1';
 import loginReducer from "./reducers/loginReducer";
+import favoriteReducer from "./reducers/favoriteReducer";
+import loaderReducer from "./reducers/loaderReducer";
 
 const persistConfig = {
     key: 'root',
@@ -12,7 +14,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers(
     {
-        login: loginReducer
+        login: loginReducer,
+        fav: favoriteReducer,
+        loader: loaderReducer
     }
 );
 

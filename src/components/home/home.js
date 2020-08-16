@@ -1,13 +1,19 @@
 import React from 'react'
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Swiper from 'react-native-swiper';
+import Horizontallist from './horizontallist';
+import HorizontallistSmall from './horizontallistsmall';
+import { ScrollView,  } from 'react-native-gesture-handler';
+import Trailer from './trailer';
 
-export default function HomeComp() {
+export default function HomeComp({ navigation, upcoming = [], popular = [], newmovie = [], slider = [] }) {
     return (
-        <View style={{ flex: 1, padding: 15, backgroundColor: 'white' }}>
+        <View style={{ flex: 1, paddingVertical: 15, backgroundColor: 'white' }}>
             <View style={styles.header}>
-                <Icon name={'bars'} size={25} color="#363636" />
+                <TouchableOpacity onPress={()=>navigation.openDrawer()}>
+                    <Icon name={'bars'} size={25} color="#363636" />
+                </TouchableOpacity>
                 <View >
                     <Text style={{ fontFamily: 'Roboto', color: '#fb5558', fontSize: 26, fontWeight: '700', marginLeft: 45 }}>movietime</Text>
                 </View>
@@ -16,36 +22,31 @@ export default function HomeComp() {
                     <Icon name={'user'} size={25} color="#363636" />
                 </View>
             </View>
-            <View style={{height: 200, marginTop: 15}}>
-                <Swiper 
-                showsButtons={true} 
-                autoplay={true} 
-                dotColor="white" 
-                activeDotColor="white"
-                activeDotStyle={{width: 30}}
-                autoplayTimeout={5}
-                showsButtons={false}
-                >
-                    <View>
-                        <Image source={{uri: 'https://image.tmdb.org/t/p/w500/okpodI7zyPwWsAm2yF5yva6Ea5h.jpg'}} resizeMode={'cover'} style={{ width: '100%', height: '100%', borderRadius: 8 }} />
-                    </View>
-                    <View>
-                        <Image source={{uri: 'https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg'}} resizeMode={'cover'} style={{ width: '100%', height: '100%', borderRadius: 8 }} />
-                    </View>
-                    <View>
-                        <Image source={{uri: 'https://image.tmdb.org/t/p/w500/re3ZvlKJg04iLpLRf1xTKHS2wLU.jpg'}} resizeMode={'contain'} style={{ width: '100%', height: '100%', borderRadius: 8 }} />
-                    </View>
-                    <View>
-                        <Image source={{uri: 'https://image.tmdb.org/t/p/w500/gavyCu1UaTaTNPsVaGXT6pe5u24.jpg'}} resizeMode={'contain'} style={{ width: '100%', height: '100%', borderRadius: 8 }} />
-                    </View>
-                    <View>
-                        <Image source={{uri: 'https://image.tmdb.org/t/p/w500/mMtUybQ6hL24FXo0F3Z4j2KG7kZ.jpg'}} resizeMode={'contain'} style={{ width: '100%', height: '100%', borderRadius: 8 }} />
-                    </View>
-                </Swiper>
-            </View>
-            <View>
-                
-            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{ height: 204, marginTop: 15, paddingHorizontal: 15 }}>
+                    {slider.length > 0 && <Swiper
+                        showsButtons={true}
+                        autoplay={true}
+                        dotColor="white"
+                        activeDotColor="white"
+                        activeDotStyle={{ width: 30 }}
+                        autoplayTimeout={5}
+                        showsButtons={false}
+                    >
+                        {slider.map((val, index) => (<View key={'slide'+index}>
+                            <Image source={{ uri: `https://image.tmdb.org/t/p/w500${val}` }} resizeMode={'cover'} style={{ width: '100%', height: '100%', borderRadius: 7 }} />
+                        </View>))}
+                    </Swiper>}
+                </View>
+                <View style={{ marginTop: 15 }}>
+                    {popular.length > 0 && <Horizontallist popular={popular} title={'MOST POPULAR MOVIES'} navigation={navigation} />}
+                </View>
+                {newmovie.length > 0 && <HorizontallistSmall movies={newmovie} title={'NEW'} navigation={navigation} />}
+                <Trailer title={'TRAILERS'} />
+                <View style={{ marginTop: 15 }}>
+                    {upcoming.length > 0 && <HorizontallistSmall movies={upcoming} title={'COMING SOON'} navigation={navigation} />}
+                </View>
+            </ScrollView>
 
         </View>
     )
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: 'space-between',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 15
     },
     wrapper: {},
     slide1: {

@@ -4,21 +4,23 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Swiper from 'react-native-swiper';
 import Horizontallist from './horizontallist';
 import HorizontallistSmall from './horizontallistsmall';
-import { ScrollView,  } from 'react-native-gesture-handler';
+import { ScrollView, } from 'react-native-gesture-handler';
 import Trailer from './trailer';
 
-export default function HomeComp({ navigation, upcoming = [], popular = [], newmovie = [], slider = [] }) {
+export default function HomeComp({ navigation, upcoming = [], popular = [], newmovie = [], slider = [], ytrailers = [] }) {
     return (
         <View style={{ flex: 1, paddingVertical: 15, backgroundColor: 'white' }}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>navigation.openDrawer()}>
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
                     <Icon name={'bars'} size={25} color="#363636" />
                 </TouchableOpacity>
                 <View >
                     <Text style={{ fontFamily: 'Roboto', color: '#fb5558', fontSize: 26, fontWeight: '700', marginLeft: 45 }}>movietime</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                    <Icon name={'search'} style={{ marginRight: 15 }} size={25} color="#363636" />
+                    <TouchableOpacity onPress={() => navigation.navigate('search')}>
+                        <Icon name={'search'} style={{ marginRight: 15 }} size={25} color="#363636" />
+                    </TouchableOpacity>
                     <Icon name={'user'} size={25} color="#363636" />
                 </View>
             </View>
@@ -33,18 +35,18 @@ export default function HomeComp({ navigation, upcoming = [], popular = [], newm
                         autoplayTimeout={5}
                         showsButtons={false}
                     >
-                        {slider.map((val, index) => (<View key={'slide'+index}>
+                        {slider.map((val, index) => (<View key={'slide' + index}>
                             <Image source={{ uri: `https://image.tmdb.org/t/p/w500${val}` }} resizeMode={'cover'} style={{ width: '100%', height: '100%', borderRadius: 7 }} />
                         </View>))}
                     </Swiper>}
                 </View>
                 <View style={{ marginTop: 15 }}>
-                    {popular.length > 0 && <Horizontallist popular={popular} title={'MOST POPULAR MOVIES'} navigation={navigation} />}
+                    {popular.length > 0 && <Horizontallist popular={popular} title={'MOST POPULAR MOVIES'} navigation={navigation} pagetype={'popular'} />}
                 </View>
-                {newmovie.length > 0 && <HorizontallistSmall movies={newmovie} title={'NEW'} navigation={navigation} />}
-                <Trailer title={'TRAILERS'} />
+                {newmovie.length > 0 && <HorizontallistSmall movies={newmovie} title={'NEW'} navigation={navigation} pagetype={'new'} />}
+                {ytrailers.length > 0 && <Trailer title={'TRAILERS'} ytrailers={ytrailers} />}
                 <View style={{ marginTop: 15 }}>
-                    {upcoming.length > 0 && <HorizontallistSmall movies={upcoming} title={'COMING SOON'} navigation={navigation} />}
+                    {upcoming.length > 0 && <HorizontallistSmall movies={upcoming} title={'COMING SOON'} navigation={navigation} pagetype={'upcoming'} />}
                 </View>
             </ScrollView>
 

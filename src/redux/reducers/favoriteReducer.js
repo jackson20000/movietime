@@ -7,7 +7,7 @@ const favoriteReducer = (state = initialState, action) => {
         case ADDFAV:
             return [...state, action.payload]
         case REMOVEFAV:
-            let tempState = state.filter(val => val !== action.payload)
+            let tempState = state.filter(val => val.id !== action.payload)
             return [...tempState ]
         default:
             return state;

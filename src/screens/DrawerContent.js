@@ -23,7 +23,7 @@ export default function DrawerContent(props) {
                         />
                     )}
                     label="Home"
-                    onPress={() => { props.navigation.navigate('Home') }}
+                    onPress={() => { props.navigation.navigate('home') }}
                 />
                 <DrawerItem
                     icon={({ color, size }) => (
@@ -44,8 +44,8 @@ export default function DrawerContent(props) {
                             size={size}
                         />
                     )}
-                    label="Favorite"
-                    onPress={() => { props.navigation.navigate('Home') }}
+                    label="Favourite"
+                    onPress={() => { props.navigation.navigate('fav') }}
                 />
                 <DrawerItem
                     icon={({ color, size }) => (

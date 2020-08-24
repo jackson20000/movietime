@@ -56,15 +56,18 @@ const moneyConverter = (money) => {
 }
 
 function MovieDetail({ details = {}, cast, navigation, reviews, Recommendation, state = [], dispatch }) {
-    console.log(state)
     const [like, setlike] = useState(false);
     const [animateIcon, setanimateIcon] = useState({});
     const handleOnPressLike = () => {
         animateIcon.bounceIn();
-        if(like){
+        if (like) {
             dispatch(removeFavAction(details.id));
-        }else{
-            dispatch(addFavAction(details.id));
+        } else {
+            dispatch(addFavAction({
+                id: details.id,
+                title: details.title,
+                poster_path: details.poster_path
+            }));
         }
         setlike(prevState => (!prevState))
     }
@@ -74,7 +77,7 @@ function MovieDetail({ details = {}, cast, navigation, reviews, Recommendation, 
     }
 
     useEffect(() => {
-        if(state.findIndex(id=> id === details.id) !== -1){
+        if (state.findIndex(mov => mov.id === details.id) !== -1) {
             setlike(true);
         }
     }, [details]);
@@ -110,7 +113,7 @@ function MovieDetail({ details = {}, cast, navigation, reviews, Recommendation, 
                 </View>
                 <View style={{ padding: 15, marginTop: 70 }}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Image source={details.poster_path ? { uri: `https://image.tmdb.org/t/p/original${details.poster_path}` } : require('../../assets/image-not-available.jpg')} style={{ height: 180, width: 120, borderRadius: 15, borderColor: 'white', borderWidth: .5 }} />
+                        <Image source={details.poster_path ? { uri: `https://image.tmdb.org/t/p/w500${details.poster_path}` } : require('../../assets/image-not-available.jpg')} style={{ height: 180, width: 120, borderRadius: 15, borderColor: 'white', borderWidth: .5 }} />
                         <View style={{ marginTop: 70, paddingLeft: 15 }}>
                             <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '700', color: '#363636', width: '65%' }}>{details.title}</Text>
                             <View style={{ flexDirection: 'row', marginTop: 6 }}>
@@ -148,9 +151,9 @@ function MovieDetail({ details = {}, cast, navigation, reviews, Recommendation, 
                 {cast.length > 0 && <View style={{ marginTop: 20 }}>
                     <Text style={{ fontFamily: 'Roboto', fontWeight: '700', fontSize: 15, color: '#363636', paddingHorizontal: 15 }}>CAST</Text>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        {cast.map((val, index) => <View key={val.id+'cast'} style={{ marginRight: 15, marginLeft: index === 0 ? 15 : 0, marginVertical: 10 }}>
+                        {cast.map((val, index) => <View key={val.id + 'cast'} style={{ marginRight: 15, marginLeft: index === 0 ? 15 : 0, marginVertical: 10 }}>
                             <TouchableOpacity onPress={() => navigation.push('cast', { id: val.id })}>
-                                <Image source={val.profile_path ? { uri: `https://image.tmdb.org/t/p/w500${val.profile_path}` }: require('../../assets/user.png')} style={{ height: 80, width: 80, borderRadius: 80 }} />
+                                <Image source={val.profile_path ? { uri: `https://image.tmdb.org/t/p/w500${val.profile_path}` } : require('../../assets/user.png')} style={{ height: 80, width: 80, borderRadius: 80 }} />
                                 <Text style={{ width: 80, marginTop: 5, fontSize: 11 }}>{val.name}</Text>
                             </TouchableOpacity>
                         </View>)}
@@ -158,7 +161,7 @@ function MovieDetail({ details = {}, cast, navigation, reviews, Recommendation, 
                 </View>}
                 <Recommented navigation={navigation} Recommendation={Recommendation} title="RECOMMENDED" />
                 <View style={{ paddingHorizontal: 15 }}>
-                    {reviews.length > 0 &&<Reviews
+                    {reviews.length > 0 && <Reviews
                         reviews={reviews}
                         _renderTruncatedFooter={_renderTruncatedFooter}
                         _renderRevealedFooter={_renderRevealedFooter}
